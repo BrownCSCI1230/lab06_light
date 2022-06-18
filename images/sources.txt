@@ -1,0 +1,2 @@
+Phong break down images from CS1230 course ppt.
+Attenuation from https://learnopengl.com/Lighting/Basic-Lighting
