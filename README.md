@@ -3,7 +3,7 @@
  * @Author: AceSix
  * @Date: 2022-06-15 21:36:49
  * @LastEditors: AceSix
- * @LastEditTime: 2022-06-22 12:27:16
+ * @LastEditTime: 2022-06-22 12:29:54
  * Copyright (C) 2022 Brown U. All rights reserved.
 -->
 # Lab 6: Light
@@ -217,6 +217,7 @@ I_{\lambda}=k_{a}O_{a\lambda}
 +\sum_{i=1}^{m}f_{att}{\color{blue}I_{\lambda,i}}\left[ k_{d}O_{d\lambda}({\bf\hat{N}}\cdot{\bf\hat{L}_{i}})
 +{\color{blue} k_{s}O_{s\lambda}({\bf\hat{R}_{i}}\cdot{\bf\hat{V}})^{n}}\right]
 $$
+
 Finally we have the specular component, which adds a highlight that makes objects appear shiny. This term is the approximation of the reflection of direct light. The specular component peaks in brightness when light is reflected in the direction of the eye. We will now use the dot product ${\bf\hat{R}_{i}}\cdot{\bf\hat{V}}$.
 
 
