@@ -3,7 +3,7 @@
  * @Author: AceSix
  * @Date: 2022-06-15 21:36:49
  * @LastEditors: AceSix
- * @LastEditTime: 2022-06-22 12:29:54
+ * @LastEditTime: 2022-06-22 19:00:37
  * Copyright (C) 2022 Brown U. All rights reserved.
 -->
 # Lab 6: Light
@@ -162,11 +162,7 @@ In the image above, light comes from one direction of the pot. If we only have d
 The amount of ambient light will be given by the object color (color) times the amount of ambient light (ambient Intensity). Note that there is an additional factor of ambient coefficient. The three global coefficients are human assigned values that control how much each component of the phong model contributes to the final illumination.
 
 ##### Task 1
-Fill in the ambient illumination in the phong equation.
-
-##### Task 2
-Add ambient illumination to total illumination after multiplying it by the ambient coefficient.
-
+Fill in the ambient illumination in the phong equation. Remember to apply the ambient coefficient.
 
 
 ### 2.2 The Diffuse Component
@@ -201,14 +197,15 @@ In the diffuse component, the production between light intensity and material co
 </p>
 
 
-##### Task 3
-Calculate the diretion from intersection point to the source of point light.
+##### Task 2
+Compute the diffuse component and add it to the illumination. For this, you need to:
+* Get the direcion from intersection point to light sources
+* calculate the cosine value of angle between surface normal and light direction
+* Calculate the diffuse term and apply its corresponding weight
 
-##### Task 4
-Calculate the cosine value of angle between normal and light direction(aka ${\bf\hat{N}}\cdot{\bf\hat{L}_{i}}$). Beware that both vectors need to be normalized.
+(Beware to normalize both vectors when you calculate ${\bf\hat{N}}\cdot{\bf\hat{L}_{i}}$.)
 
-##### Task 5
-Add diffuse illumination to total illumination after multiplying it by the diffuse coefficient.
+
 
 
 ### 2.3 The Specular Component
@@ -236,11 +233,12 @@ In order to make the specular highlight small, we raise the dot product to an ex
     </figcaption>
 </p>
 
-##### Task 6
-Calculate the reflection direction of the incoming light and eyesight direction based on the data provided.
+##### Task 3
+Calculate the specular component. 
+* get reflection direction of the incoming light
+* get eyesight direction based on the data provided.
 
-##### Task 7
-Calculate the specular component.
+Calculate the 
 
 
 ### 2.4 Attenuation
@@ -261,8 +259,8 @@ In real life, the intensity of light decreases as the distance between object an
 </p>
 
 
-##### Task 8
-<span style="color:red">(May be optional)</span>
+##### Task 4
+<!-- <span style="color:red">(May be optional)</span> -->
 Calculate the distance from intersection point to light source. Apply attenuation to the diffuse and specular component according to the function below.
 $$
 f_{att} = min(1, \frac{1}{c_1 + distance*c_2 + distance^2*c_3})
@@ -285,6 +283,6 @@ $$
 
 You may wonder how many time we should do recursive tracing since the illumination from reflection intersection may have its own reflection. Usually we use the term depth to refer to the number of times we perform recursive tracing. In a well-developed ray tracing program, you could set your depth to be really large for very cool effect! But we only do recursive ray tracing for one time within the scope of this lab.
 
-##### Task 9
+##### Task 5
 Calculate the reflected eyesight direction. Perform ray tracing again to get reflected illumination. We provide you with an interface getReflection(source, dir) to acquire reflection illumination.
 

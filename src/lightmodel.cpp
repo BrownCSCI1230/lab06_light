@@ -2,42 +2,39 @@
 #include <math.h>
 
 
-RGBA phong(glm::vec3 p, glm::vec3 n, glm::vec3 c, Material m, LightInfo l)
+RGBA phong(glm::vec3 p, glm::vec3 n, glm::vec3 c, Material m, std::vector<LightInfo> lights)
 {
     glm::vec4 illumination(1,1,1,1);
 
     // Task 1:
-    glm::vec4 ambient_term = m.ambient;
+    illumination = m.ambient*ka;
 
-    // Task 2:
-    illumination = ambient_term*ka;
+    for (LightInfo l: lights)
+    {
+        // Task 2:
+        glm::vec3 light_dir = p - l.source;
+        light_dir = glm::normalize(light_dir);
 
-    // Task 3:
-    glm::vec3 light_dir = p - l.source;
-    light_dir = glm::normalize(light_dir);
+        // Task 4:
+        float distance = glm::length(p - l.source);
+        float atten = std::min(1.f, 1.f/(c1 + c2*distance + c3*distance*distance));
 
-    // Task 8:
-    float distance = glm::length(p - l.source);
-    float atten = std::min(1.f, 1.f/(c1 + c2*distance + c3*distance*distance));
+        // Task 2, Task 4:
+        float cos = -glm::dot(n, light_dir);
+        cos = std::clamp(cos, 0.f, 1.f);
+        illumination += l.color*m.diffuse*cos*kd*atten;
 
-    // Task 4:
-    float cos = -glm::dot(n, light_dir);
-    cos = std::clamp(cos, 0.f, 1.f);
+        // Task 3, Task 4:
+        glm::vec3 eyesight = glm::normalize(c - p);
+        glm::vec3 reflect = 2.f*cos*n + light_dir;
+        float cos2 = glm::dot(eyesight, reflect);
+        cos2 = std::clamp(cos2, 0.f, 1.f);
+        glm::vec4 specular_term = l.color*m.specular*(float)pow(cos2, m.shininess);
+        illumination += specular_term*ks*atten;
 
-    // Task 5, Task 8:
-    glm::vec4 diffuse_term = l.color*m.diffuse*cos;
-    illumination += diffuse_term*kd*atten;
+    }
+    // Task 5:
 
-    // Task 6:
-    glm::vec3 eyesight = glm::normalize(c - p);
-    glm::vec3 reflect = 2.f*cos*n + light_dir;
-
-
-    // Task 7, Task 8:
-    float cos2 = glm::dot(eyesight, reflect);
-    cos2 = std::clamp(cos2, 0.f, 1.f);
-    glm::vec4 specular_term = l.color*m.specular*(float)pow(cos2, m.shininess);
-    illumination += specular_term*ks*atten;
 
     // Task 0:
     RGBA out(0,0,0,0);

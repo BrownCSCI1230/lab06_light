@@ -52,8 +52,6 @@ pixel_info Canvas2D::getPixelInfo(glm::vec3 src, glm::vec3 dir)
 
 
     pixel_info info;
-    info.lightInfo.color = glm::vec4(0.99, 0.99, 0.99, 1);
-    info.lightInfo.source = glm::vec3(2.5, 1.5, 2);
     info.material.shininess = 10;
     info.intersect = t>0;
 
@@ -86,6 +84,10 @@ void Canvas2D::draw()
     RGBA tmp(35,45,255,255);
 
     glm::vec3 camera = glm::vec3(0,0,5);
+    std::vector<LightInfo> lights;
+    lights.clear();
+    lights.push_back(LightInfo{glm::vec4(0.99, 0.99, 0.99, 1), glm::vec3(2, 2, 2)});
+    lights.push_back(LightInfo{glm::vec4(0.99, 0.99, 0.99, 1), glm::vec3(-4, 4, 4)});
 
     for(int i=0;i<width;i++)
         for(int j=0;j<height;j++)
@@ -95,10 +97,33 @@ void Canvas2D::draw()
             lightdir = glm::normalize(lightdir);
             pixel_info info = getPixelInfo(camera, lightdir);
             if(info.intersect)
-                tmp = phong(info.position, info.normal, camera, info.material, info.lightInfo);
+                tmp = phong(info.position, info.normal, camera, info.material, lights);
             else
                 tmp = RGBA(0,0,0,0);
             m_image->setPixel(i,j,tmp.convertQt());
         }
 
 }
+
+void Canvas2D::draw_load()
+{
+    RGBA tmp(35,45,255,255);
+
+    glm::vec3 camera = glm::vec3(0,0,5);
+
+//    for(int i=0;i<width;i++)
+//        for(int j=0;j<height;j++)
+//        {
+//            //
+//            glm::vec3 lightdir = glm::vec3((i+0.5-width/2)/height, -(j+0.5-height/2)/height, 3.6) - camera;
+//            lightdir = glm::normalize(lightdir);
+//            pixel_info info = getPixelInfo(camera, lightdir);
+//            if(info.intersect)
+//                tmp = phong(info.position, info.normal, camera, info.material, info.lightInfo);
+//            else
+//                tmp = RGBA(0,0,0,0);
+//            m_image->setPixel(i,j,tmp.convertQt());
+//        }
+
+}
+

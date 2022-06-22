@@ -3,7 +3,8 @@
 
 #include "glm/gtc/matrix_transform.hpp"
 
-
+#include <vector>
+#include <QImage>
 #include <QWidget>
 #include "utils.h"
 
@@ -12,7 +13,6 @@ struct pixel_info
     glm::vec3 position;
     glm::vec3 normal;
     Material material;
-    LightInfo lightInfo;
     bool intersect=false;
 };
 
@@ -23,6 +23,7 @@ public:
     Canvas2D(QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
     ~Canvas2D();
     void draw();
+    void draw_load();
     void paintEvent(QPaintEvent *event);
 
 protected:
