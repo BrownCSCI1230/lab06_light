@@ -1,2 +1,4 @@
 Phong break down images from CS1230 course ppt.
-Attenuation from https://learnopengl.com/Lighting/Basic-Lighting
+Attenuation: https://learnopengl.com/Lighting/Basic-Lighting
+lighting models: https://www.jordanstevenstechart.com/lighting-models
+tone mapping: https://www.flickr.com/photos/cormackc/2381410445
