@@ -2,7 +2,8 @@
 #include <math.h>
 
 
-RGBA phong(glm::vec3 p, glm::vec3 n, glm::vec3 c, Material m, std::vector<LightInfo> lights)
+RGBA phong(glm::vec3 p, glm::vec3 n, glm::vec3 c, Material m,
+           std::vector<LightInfo> lights, Sampler refl_sampler)
 {
     glm::vec4 illumination(1,1,1,1);
 
@@ -31,10 +32,13 @@ RGBA phong(glm::vec3 p, glm::vec3 n, glm::vec3 c, Material m, std::vector<LightI
         cos2 = std::clamp(cos2, 0.f, 1.f);
         glm::vec4 specular_term = l.color*m.specular*(float)pow(cos2, m.shininess);
         illumination += specular_term*ks*atten;
-
     }
-    // Task 5:
 
+    // Task 5:
+    glm::vec3 eyesight = -glm::normalize(c - p);
+    float cos_en = -glm::dot(eyesight, n);
+    glm::vec3 reflect_eye = 2.f*cos_en*n + eyesight;
+    illumination += kr*refl_sampler.sample(p, glm::normalize(reflect_eye));
 
     // Task 0:
     RGBA out(0,0,0,0);

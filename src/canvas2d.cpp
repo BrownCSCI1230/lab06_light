@@ -88,6 +88,7 @@ void Canvas2D::draw()
     lights.clear();
     lights.push_back(LightInfo{glm::vec4(0.99, 0.99, 0.99, 1), glm::vec3(2, 2, 2)});
     lights.push_back(LightInfo{glm::vec4(0.99, 0.99, 0.99, 1), glm::vec3(-4, 4, 4)});
+    Sampler refl_sampler(QString("../lab06_light/images/background.png"));
 
     for(int i=0;i<width;i++)
         for(int j=0;j<height;j++)
@@ -97,7 +98,7 @@ void Canvas2D::draw()
             lightdir = glm::normalize(lightdir);
             pixel_info info = getPixelInfo(camera, lightdir);
             if(info.intersect)
-                tmp = phong(info.position, info.normal, camera, info.material, lights);
+                tmp = phong(info.position, info.normal, camera, info.material, lights, refl_sampler);
             else
                 tmp = RGBA(0,0,0,0);
             m_image->setPixel(i,j,tmp.convertQt());
