@@ -3,7 +3,7 @@
  * @Author: AceSix
  * @Date: 2022-06-15 21:36:49
  * @LastEditors: AceSix
- * @LastEditTime: 2022-06-22 19:00:37
+ * @LastEditTime: 2022-07-06 13:11:43
  * Copyright (C) 2022 Brown U. All rights reserved.
 -->
 
@@ -46,11 +46,14 @@ However, [simulating light perfectly is hard](link). Thus, we use simplified **m
 
 [ optional: image showing that light simulation is hard ]
 
-There exist many different lighting models, like the Phong, [Cook-Torrance](https://graphics.pixar.com/library/ReflectanceModel/paper.pdf), [Minnaert](https://adsabs.harvard.edu/full/1941ApJ....93..403M) and [Oren-Nayer](https://www1.cs.columbia.edu/CAVE/publications/pdfs/Oren_SIGGRAPH94.pdf) lighting models, but all of them model the interactions between objects and light.
+There exist many different lighting models, like the Phong, [Cook-Torrance](https://graphics.pixar.com/library/ReflectanceModel/paper.pdf), [Minnaert](https://adsabs.harvard.edu/full/1941ApJ....93..403M) and [Oren-Nayer](https://www1.cs.columbia.edu/CAVE/publications/pdfs/Oren_SIGGRAPH94.pdf) lighting models. They all model the interactions between objects and light, but with different mathematical and physical bases.
 
-These models differ in their mathematical and physical bases.
-
-[ required: image comparing different lighting models ]
+<p align="center">
+    <img src="images/LightingModels.png" width="95%">
+    <figcaption align = "center"> <b>Fig. 2</b> 
+    Different lighting models.
+    </figcaption>
+</p>
 
  <!-- simulating the interaction of light with objects in the scene.  -->
 
@@ -60,8 +63,7 @@ In this lab, and in your raytracer, you will be using the **Phong lighting model
 
 [ required: equation and image representing Phong LM ]
 
-The Phong lighting model
-
+    
 <details>
   <summary> But I thought rays shot out <i>from</i> the camera! </summary>
   
@@ -73,7 +75,7 @@ Being realistic, raytracing has to work backwards. The "correct" order requires 
 
 </details>
 
-determines the color of each pixel in your rendered image by basing it on:
+The Phong lighting model determines the color of each pixel in your rendered image by basing it on:
 
 - The material properties of the surface/object at the intersection point,
 - The placement and properties of **light sources** in the scene, and
@@ -89,7 +91,7 @@ In doing so, it simulates the intensity of the "light" traveling along a "ray" f
 
 ### 1.3. What You Will Do In This Lab
 
-To get you started with lighting proper, in this lab, you will complete a function that calculates lighting given some data.
+To get you started with lighting properly, in this lab, you will complete a function that calculates lighting with some given data.
 
 To focus solely on the lighting part of raytracing, you won’t need to worry about shooting rays and get intersections. We will provide you with the necessary data, like intersection position, surface normals, and some global data.
 
@@ -97,22 +99,28 @@ To focus solely on the lighting part of raytracing, you won’t need to worry ab
 
 Specifically, you will work on this function at the pixel level. You will have a 2D array of intersection data. Each element in this array contains the data you need in order to calculate its RGBA value.
 
-[ required: image representing an array of data turning into (arrow to) an array of colored pixels / an image ]
+<p align="center">
+    <img src="images/array.png" width="95%">
+    <figcaption align = "center"> <b>Fig. 3</b> 
+    2D array processing
+    </figcaption>
+</p>
+
 
 #### 1.3.2. Additional Global Parameters
 
-Apart from the 2D array of intersection data, you need some global data such as coefficients for each component of illumination and light sources. In this Lab, we will only be working with point light sources. Point light is the light that shoots light rays from one simple point to all directions. And the illumination of a point light in any direction is the same. The light color and direction is important for calculating some part of the Phong model, which we will cover more in the following contents.
+Apart from the 2D array of intersection data, you need some global data such as coefficients for each component of illumination and light sources. In this Lab, we will only be working with point light sources. Point light is the light that shoots light rays from one simple point to all directions with the same illumination. The light color and direction is important for calculating some part of the Phong model, which we will cover more in the following contents.
 
 <p align="center">
     <img src="images/pipeline.png" width="80%">
-    <figcaption align = "center"> <b>Fig. 2</b> 
+    <figcaption align = "center"> <b>Fig. 4</b> 
     Lab task illustration
     </figcaption>
 </p>
 
 ## 2. Implementing The Phong Lighting Model
 
-Here, we will explain the basics of the phong lighting model, which is one of many lighting models people use for rendering scenes. The phong model we implement here is a simplified version:
+Here, we will explain the basics of the phong lighting model, which you will implement. Below is phong model's equation. This equation contains three components: ambient, diffuse and specular. Together they create a pretty realistic visual effect as the image shown in Fig.5. In the remainder of this chapter, we will explain the terms of equation along with their visual effects one by one.
 
 $$
 I_{\lambda}=k_{a}O_{a\lambda}
@@ -135,11 +143,11 @@ Where:
 - ${\bf\hat{V}}$: is the normalized line of sight vector
 - n: is the specular exponent (or shininess)
 
-The equation above contains three components: ambient, diffuse and specular. Together they create a pretty realistic visual effect as the image shown below. In the remainder of this chapter, we will break down this equation and implement the components one by one.
+ 
 
 <p align="center">
     <img src="images/full.png" width="40%">
-    <figcaption align = "center"> <b>Fig. 3</b> 
+    <figcaption align = "center"> <b>Fig. 5</b> 
     Complete Phong effect
     </figcaption>
 </p>
@@ -148,7 +156,7 @@ The equation above contains three components: ambient, diffuse and specular. Tog
 
 To begin with, it is important to know how our rendered image is shown on the screen. As you already know, an image is a grid of cells where each cell has its own color values. Here we use the RGBA color format, which is a tuple of four integers in the range of [0,255].
 
-But the light intensity we will calculate may range from zero to infinity. As you can see in the equation, the diffuse and specular components are accumulated over all the light sources in the scene. The overall illumination can add up to infinity when there are many lights even if all parameters for material or lights are finite values.Thus, we must map our output intensity values to something between 0-255.
+However, as you can see in the equation, the diffuse and specular components are accumulated over all the light sources in the scene. That means the light intensity we calculate may range from zero to infinity. <!-- The overall illumination can add up to infinity when there are many lights even if all parameters for material or lights are finite values.  --> Thus, we must map our output intensity values to something between 0-255.
 
 There exists many different methods to convert light intensity to finite RGB values, here we’ve chosen the simplest method to do this: clipping to limit the intensity of each color channel to [0,1] (as it is the range of parameters we use) and scale it linearly to [0, 255]. (In the equation below, $C$ is the color of pixel, $I$ is the light intensity and $\lambda$ indicates color channel.)
 
@@ -195,19 +203,19 @@ I_{\lambda}={\color{blue} k_{a}O_{a\lambda}}
 +k_{s}O_{s\lambda}({\bf\hat{R}_{i}}\cdot{\bf\hat{V}})^{n}\right]
 $$
 
-We’ll start by adding in the ambient component. The ambient component simply adds a constant amount of lighting to all objects in the scene. This lighting component works regardless of any light sources. Without it many scenes appear too dark. Here we use a different example to see the too dark situation.
+We’ll start by adding in the ambient component. This component simply adds a constant amount of lighting to all objects in the scene, regardless of light sources. It simulates the effect of indirect light in a scene to avoid some parts being too dark due to lack of direct light.
 
 <p align="center">
     <img src="images/teapot.png" width="90%">
-
+    <figcaption align = "center"> <b>Fig. 6</b> 
+    Teapot with light coming from one direction. If we only have diffuse and specular light the bottom and right side of the tea pot are not visible.
+    </figcaption>
 </p>
-
-In the image above, light comes from one direction of the pot. If we only have diffuse and specular light the bottom and right side of the tea pot are not visible because they don’t face the light source directly.
 
 <p align="center">
     <img src="images/ambient.png" width="40%">
-    <figcaption align = "center"> <b>Fig. 4</b> 
-    Ambient effect alone of Fig. 3
+    <figcaption align = "center"> <b>Fig. 7</b> 
+    Ambient effect alone of Fig. 5
     </figcaption>
 </p>
 
@@ -229,14 +237,14 @@ Now let’s add the diffuse component, which makes surfaces that are facing towa
 
 <p align="center">
     <img src="images/diffuse.png" width="40%">
-    <figcaption align = "center"> <b>Fig. 5</b> 
-    Diffuse effect alone of Fig. 3
+    <figcaption align = "center"> <b>Fig. 8</b> 
+    Diffuse effect alone of Fig. 5
     </figcaption>
 </p>
 
 <p align="center">
     <img src="images/light_diffuse.jpg" width="70%">
-    <figcaption align = "center"> <b>Fig. 6</b> 
+    <figcaption align = "center"> <b>Fig. 9</b> 
     Illustration of diffuse light
     </figcaption>
 </p>
@@ -245,7 +253,7 @@ In the diffuse component, the production between light intensity and material co
 
 <p align="center">
     <img src="images/lambert.png" width="90%">
-    <figcaption align = "center"> <b>Fig. 7</b> 
+    <figcaption align = "center"> <b>Fig. 10</b> 
     Lambert’s law
     </figcaption>
 </p>
@@ -272,7 +280,7 @@ Finally we have the specular component, which adds a highlight that makes object
 
 <p align="center">
     <img src="images/eye_specular.png" width="50%">
-    <figcaption align = "center"> <b>Fig. 8</b> 
+    <figcaption align = "center"> <b>Fig. 11</b> 
     Mechanism of specular light
     </figcaption>
 </p>
@@ -281,8 +289,8 @@ In order to make the specular highlight small, we raise the dot product to an ex
 
 <p align="center">
     <img src="images/specular.png" width="40%">
-    <figcaption align = "center"> <b>Fig. 9</b> 
-    Specular effect alone of Fig. 3
+    <figcaption align = "center"> <b>Fig. 12</b> 
+    Specular effect alone of Fig. 5
     </figcaption>
 </p>
 
@@ -324,7 +332,9 @@ $$
 
 ## 3. Reflection
 
-Now we will try to add some other component to our lighting model. A clear and simple expansion is the mirror reflection. In a way, diffuse and specular are reflections that are loose or less concentrated. And mirror reflections are the reflections that are completely concentrated, which usually happens on perfect mirror surface. You can see the mirror reflection effect almost everywhere in your life.
+Now you have an image with great lighting effect after finishing the phong lighting model. We can extend the phong lighting model by adding some other component to make the image look better!
+
+One interesting and simple extension is the mirror reflection. In a way, diffuse and specular are reflections that are loose or less concentrated. And mirror reflections are the reflections that are completely concentrated, which usually happens on perfect mirror surface. You can see the mirror reflection effect almost everywhere in your life.
 
 <p align="center">
     <img src="images/reflection.jpg" width="60%">
