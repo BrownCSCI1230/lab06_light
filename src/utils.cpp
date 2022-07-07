@@ -12,6 +12,7 @@ float inct_sphere(glm::vec3 pos, glm::vec3 dir)
         float a1 = -sqrt(tmp)-B;
         float a2 = sqrt(tmp)-B;
         float _t = a1>0 ? a1:a2;
+//        float _t = a2;
         if(_t>0) return _t;
     }
 
@@ -22,8 +23,8 @@ float inct_sphere(glm::vec3 pos, glm::vec3 dir)
 Sampler::Sampler(QString path)
 {
     background = QImage(path);
-    h_ratio = background.size().height()/10.f;
-    w_ratio = background.size().width()/10.f;
+    h_ratio = background.size().height()/10.1f;
+    w_ratio = background.size().width()/10.1f;
 }
 
 glm::vec4 Sampler::Qc2vec(QColor c)

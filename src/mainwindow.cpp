@@ -11,7 +11,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     m_canvas = ui->Canvas;
     m_canvas->show();
-    m_canvas->draw();
+//    m_canvas->draw();
+    m_canvas->draw_load();
 }
 
 MainWindow::~MainWindow()

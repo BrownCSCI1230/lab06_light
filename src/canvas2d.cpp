@@ -8,6 +8,8 @@
  */
 #include <QPainter>
 #include <QString>
+#include <iostream>
+#include <fstream>
 
 #include "rgba.h"
 #include "canvas2d.h"
@@ -55,6 +57,7 @@ pixel_info Canvas2D::getPixelInfo(glm::vec3 src, glm::vec3 dir)
     info.material.shininess = 10;
     info.intersect = t>0;
 
+
     if(t==t1) {
         info.position = src + dir*t;
         info.normal = glm::normalize(src + dir*t);
@@ -75,6 +78,9 @@ pixel_info Canvas2D::getPixelInfo(glm::vec3 src, glm::vec3 dir)
         info.material.specular = glm::vec4(0.95, 0.95, 0.95, 1);
     }
 
+    if(info.intersect)
+        info.sight = src - info.position;
+
     return info;
 }
 
@@ -89,42 +95,61 @@ void Canvas2D::draw()
     lights.push_back(LightInfo{glm::vec4(0.99, 0.99, 0.99, 1), glm::vec3(2, 2, 2)});
     lights.push_back(LightInfo{glm::vec4(0.99, 0.99, 0.99, 1), glm::vec3(-4, 4, 4)});
     Sampler refl_sampler(QString("../lab06_light/images/background.png"));
+    std::ofstream outFile("../lab06_light/intersections.dat", std::ios::out | std::ios::binary);
 
     for(int i=0;i<width;i++)
         for(int j=0;j<height;j++)
+//     for(int i=0;i<165;i++)
+//               for(int j=0;j<256;j++)
         {
             //
             glm::vec3 lightdir = glm::vec3((i+0.5-width/2)/height, -(j+0.5-height/2)/height, 3.6) - camera;
             lightdir = glm::normalize(lightdir);
             pixel_info info = getPixelInfo(camera, lightdir);
+
+            if(i==164 && j ==255)
+            {
+                std::cout << lightdir.x <<"," << lightdir.y <<"," << lightdir.z << std::endl;
+                std::cout << info.position.x <<"," << info.position.y <<"," << info.position.z << std::endl;
+                std::cout << info.normal.x <<"," << info.normal.y <<"," << info.normal.z << std::endl;
+                std::cout << std::flush;
+            }
+
+            outFile.write((char*)&info, sizeof(info));
             if(info.intersect)
-                tmp = phong(info.position, info.normal, camera, info.material, lights, refl_sampler);
+                tmp = phong(info.position, info.normal, info.sight, info.material, lights, refl_sampler);
             else
                 tmp = RGBA(0,0,0,0);
             m_image->setPixel(i,j,tmp.convertQt());
         }
 
+    outFile.close();
 }
 
 void Canvas2D::draw_load()
 {
     RGBA tmp(35,45,255,255);
 
-    glm::vec3 camera = glm::vec3(0,0,5);
 
-//    for(int i=0;i<width;i++)
-//        for(int j=0;j<height;j++)
-//        {
-//            //
-//            glm::vec3 lightdir = glm::vec3((i+0.5-width/2)/height, -(j+0.5-height/2)/height, 3.6) - camera;
-//            lightdir = glm::normalize(lightdir);
-//            pixel_info info = getPixelInfo(camera, lightdir);
-//            if(info.intersect)
-//                tmp = phong(info.position, info.normal, camera, info.material, info.lightInfo);
-//            else
-//                tmp = RGBA(0,0,0,0);
-//            m_image->setPixel(i,j,tmp.convertQt());
-//        }
+    std::ifstream inFile("../lab06_light/intersections.dat", std::ios::in | std::ios::binary);
+    pixel_info info;
+    std::vector<LightInfo> lights;
+    lights.clear();
+    lights.push_back(LightInfo{glm::vec4(0.99, 0.99, 0.99, 1), glm::vec3(2, 2, 2)});
+    lights.push_back(LightInfo{glm::vec4(0.99, 0.99, 0.99, 1), glm::vec3(-4, 4, 4)});
+    Sampler refl_sampler(QString("../lab06_light/images/background.png"));
+
+    for(int i=0;i<width;i++)
+        for(int j=0;j<height;j++)
+        {
+
+            inFile.read((char *)&info, sizeof(info));
+            if(info.intersect)
+                tmp = phong(info.position, info.normal, info.sight, info.material, lights, refl_sampler);
+            else
+                tmp = RGBA(0,0,0,0);
+            m_image->setPixel(i,j,tmp.convertQt());
+        }
 
 }
 

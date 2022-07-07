@@ -2,7 +2,7 @@
 #include <math.h>
 
 
-RGBA phong(glm::vec3 p, glm::vec3 n, glm::vec3 c, Material m,
+RGBA phong(glm::vec3 p, glm::vec3 n, glm::vec3 s, Material m,
            std::vector<LightInfo> lights, Sampler refl_sampler)
 {
     glm::vec4 illumination(1,1,1,1);
@@ -26,7 +26,7 @@ RGBA phong(glm::vec3 p, glm::vec3 n, glm::vec3 c, Material m,
         illumination += l.color*m.diffuse*cos*kd*atten;
 
         // Task 3, Task 4:
-        glm::vec3 eyesight = glm::normalize(c - p);
+        glm::vec3 eyesight = glm::normalize(s);
         glm::vec3 reflect = 2.f*cos*n + light_dir;
         float cos2 = glm::dot(eyesight, reflect);
         cos2 = std::clamp(cos2, 0.f, 1.f);
@@ -35,7 +35,7 @@ RGBA phong(glm::vec3 p, glm::vec3 n, glm::vec3 c, Material m,
     }
 
     // Task 5:
-    glm::vec3 eyesight = -glm::normalize(c - p);
+    glm::vec3 eyesight = -glm::normalize(s);
     float cos_en = -glm::dot(eyesight, n);
     glm::vec3 reflect_eye = 2.f*cos_en*n + eyesight;
     illumination += kr*refl_sampler.sample(p, glm::normalize(reflect_eye));
@@ -46,5 +46,6 @@ RGBA phong(glm::vec3 p, glm::vec3 n, glm::vec3 c, Material m,
     out.g = glm::clamp(illumination.g, 0.f, 1.f)*255.f;
     out.b = glm::clamp(illumination.b, 0.f, 1.f)*255.f;
     out.a = glm::clamp(illumination.a, 0.f, 1.f)*255.f;
+
     return out;
 }
