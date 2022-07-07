@@ -3,6 +3,7 @@
 
 #include "glm.hpp"
 #include "rgba.h"
+#include "param.h"
 #include "utils.h"
 
 #include <vector>

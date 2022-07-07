@@ -20,6 +20,7 @@ HEADERS += \
     src/canvas2d.h \
     src/lightmodel.h \
     src/mainwindow.h \
+    src/param.h \
     src/rgba.h \
     src/utils.h
 
