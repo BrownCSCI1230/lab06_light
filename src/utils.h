@@ -9,7 +9,7 @@
 
 
 
-float inct_sphere(glm::vec3 pos, glm::vec3 dir);
+//float inct_sphere(glm::vec3 pos, glm::vec3 dir);
 
 class Sampler
 {
