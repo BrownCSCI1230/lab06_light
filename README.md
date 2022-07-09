@@ -3,7 +3,7 @@
  * @Author: AceSix
  * @Date: 2022-06-15 21:36:49
  * @LastEditors: AceSix
- * @LastEditTime: 2022-07-06 13:11:43
+ * @LastEditTime: 2022-07-09 13:25:15
  * Copyright (C) 2022 Brown U. All rights reserved.
 -->
 
@@ -24,7 +24,7 @@ In your first part of the ray project, you have already implemented the first tw
 The idea of raytracing is to shoot a ray from the camera through a pixel, track its intersection in the scene, and compute the lighting at intersection point to get the illumination at that pixel. We focus on the lighting part of this pipeline. This step, as is shown in the figure below, is the final part of raytracing and directly leads to the final image. -->
 
 <p align="center">
-    <img src="images/raytracing.png" width="80%">
+    <img src="images/raytracing.png" width="70%">
     <figcaption align = "center"> <b>Fig. 1</b> 
     Illustration of raytracing pipeline
     </figcaption>
@@ -44,12 +44,12 @@ In this lab, you will:
 
 However, [simulating light perfectly is hard](link). Thus, we use simplified **models** to approximate light simulations, instead.
 
-[ optional: image showing that light simulation is hard ]
+<!-- [ optional: image showing that light simulation is hard ] -->
 
 There exist many different lighting models, like the Phong, [Cook-Torrance](https://graphics.pixar.com/library/ReflectanceModel/paper.pdf), [Minnaert](https://adsabs.harvard.edu/full/1941ApJ....93..403M) and [Oren-Nayer](https://www1.cs.columbia.edu/CAVE/publications/pdfs/Oren_SIGGRAPH94.pdf) lighting models. They all model the interactions between objects and light, but with different mathematical and physical bases.
 
 <p align="center">
-    <img src="images/LightingModels.png" width="95%">
+    <img src="images/LightingModels.png" width="80%">
     <figcaption align = "center"> <b>Fig. 2</b> 
     Different lighting models.
     </figcaption>
@@ -61,8 +61,10 @@ There exist many different lighting models, like the Phong, [Cook-Torrance](http
 
 In this lab, and in your raytracer, you will be using the **Phong lighting model**. It has three main terms&mdash;ambient, diffuse, and specular&mdash;which you will learn about in greater detail in subsequent sections.
 
-[ required: equation and image representing Phong LM ]
-
+<!-- [ required: equation and image representing Phong LM ] -->
+<p align="center">
+    <img src="images/phong_overview.png" width="70%">
+</p>
     
 <details>
   <summary> But I thought rays shot out <i>from</i> the camera! </summary>
@@ -83,7 +85,7 @@ The Phong lighting model determines the color of each pixel in your rendered ima
 
 In doing so, it simulates the intensity of the "light" traveling along a "ray" from the intersection point to the camera.
 
-[ Equation ]
+<!-- [ Equation ] -->
 
 > We use the Phong illumination model in CS123 because it's simpler and fairly easy to implement.
 >
@@ -117,6 +119,9 @@ Apart from the 2D array of intersection data, you need some global data such as 
     Lab task illustration
     </figcaption>
 </p>
+
+
+<span style="font:50%;">**Some info**: What you finish in this lab is actually a shader program. It computes the color of each pixel with given per-pixel data. You will learn more about this in the realtime lab.</span>
 
 ## 2. Implementing The Phong Lighting Model
 
