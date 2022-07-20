@@ -6,7 +6,13 @@
 #include <vector>
 #include <QWidget>
 #include "param.h"
-#include "utils.h"
+#include "ReflSampler.h"
+
+/*
+ * Header file for canvas2d.cpp
+ * You are NOT supposed to modify this file.
+ */
+
 
 class Canvas2D : public QWidget
 {

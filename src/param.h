@@ -6,6 +6,13 @@
 #include "rgba.h"
 
 
+/*
+ * This file contains the parameters and data structures that you
+ * will be working with.
+ * You are NOT supposed to modify this file.
+ */
+
+
 const float ka = 0.5;   // weight for ambient light
 const float kd = 0.5;   // weight for diffuse light
 const float ks = 0.5;   // weight for specular light

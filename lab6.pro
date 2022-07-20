@@ -10,19 +10,19 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
+    src/ReflSampler.cpp \
     src/canvas2d.cpp \
     src/lightmodel.cpp \
     src/mainwindow.cpp \
-    src/rgba.cpp \
-    src/utils.cpp
+    src/rgba.cpp
 
 HEADERS += \
+    src/ReflSampler.h \
     src/canvas2d.h \
     src/lightmodel.h \
     src/mainwindow.h \
     src/param.h \
-    src/rgba.h \
-    src/utils.h
+    src/rgba.h
 
 INCLUDEPATH += src glm
 DEPENDPATH += src glm

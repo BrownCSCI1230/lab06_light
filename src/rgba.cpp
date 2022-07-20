@@ -1,5 +1,12 @@
 #include "rgba.h"
 
+
+
+/*
+ * You are NOT supposed to modify this file.
+ */
+
+
 RGBA RGBA::operator+(const RGBA &that) const {
     return RGBA(this->r + that.r, this->g + that.g, this->b + that.b, this->a + that.a);
 }

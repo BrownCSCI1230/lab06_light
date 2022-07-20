@@ -3,7 +3,12 @@
 
 #include <QPainter>
 
-// A structure for a color.  Each channel is 8 bits [0-255].
+/*
+ * A structure for a color. Each channel is 8 bits [0-255].
+ * You may not need these operations defines.
+ * You are NOT supposed to modify this file.
+ */
+
 struct RGBA {
     RGBA() : r(0), g(0), b(0), a(255) {}
     RGBA(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 255)

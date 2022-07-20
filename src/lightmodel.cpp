@@ -1,7 +1,14 @@
 #include "lightmodel.h"
 #include <math.h>
 
+/*
+ * This file contains the phong function you need to fill in.
+ * Check detailed explanation about input arguments at lightmodel.cpp
+ * This should be the ONLY file you modify.
+ */
 
+
+// calculates RGBA of a pixel with given infomation
 RGBA phong(glm::vec3 p, glm::vec3 n, glm::vec3 s, Material m,
            std::vector<LightInfo> lights, Sampler refl_sampler)
 {
@@ -35,6 +42,9 @@ RGBA phong(glm::vec3 p, glm::vec3 n, glm::vec3 s, Material m,
     }
 
     // Task 5:
+    // usage for reflection sampler:
+    //      Sampler::sample(glm::vec3 start_position, glm::vec3 light direction) -> glm::vec4
+    //      Returns reflection intensity at a direction from start position
     glm::vec3 eyesight = -glm::normalize(s);
     float cos_en = -glm::dot(eyesight, n);
     glm::vec3 reflect_eye = 2.f*cos_en*n + eyesight;

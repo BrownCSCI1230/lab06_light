@@ -1,5 +1,5 @@
-#ifndef UTILS_H
-#define UTILS_H
+#ifndef REFLSAMPLER_H
+#define REFLSAMPLER_H
 
 #include <QImage>
 #include <QString>
@@ -8,8 +8,10 @@
 #include "rgba.h"
 
 
-
-//float inct_sphere(glm::vec3 pos, glm::vec3 dir);
+/*
+ * Header file for ReflSampler.cpp
+ * You are NOT supposed to modify this file.
+ */
 
 class Sampler
 {
@@ -26,4 +28,4 @@ private:
     float w_ratio;
 };
 
-#endif // UTILS_H
+#endif // REFLSAMPLER_H
