@@ -8,8 +8,11 @@
  */
 #include <QPainter>
 #include <QString>
+#include <string>
 #include <iostream>
 #include <fstream>
+#include <QCoreApplication>
+#include <Qfile>
 
 #include "rgba.h"
 #include "canvas2d.h"
@@ -52,10 +55,12 @@ void Canvas2D::draw_load()
     lights.clear();
     lights.push_back(LightInfo{glm::vec4(0.99, 0.99, 0.99, 1), glm::vec3(2, 2, 2)});
     lights.push_back(LightInfo{glm::vec4(0.99, 0.99, 0.99, 1), glm::vec3(-4, 4, 4)});
-    Sampler refl_sampler(QString("../lab06_light/images/background.png"));
+    Sampler refl_sampler(QString(":/images/background.png"));
 
     // load intersection data
-    std::ifstream inFile("../lab06_light/intersections.dat", std::ios::in | std::ios::binary);
+    std::string data_path = QCoreApplication::applicationDirPath().toStdString()+"intersections.dat";
+    QFile::copy(QString(":/intersections.dat"), data_path.c_str());
+    std::ifstream inFile(data_path, std::ios::in | std::ios::binary);
     pixel_info info;
     RGBA tmp(0,0,0,0);
     for(int i=0;i<width;i++)
@@ -70,6 +75,5 @@ void Canvas2D::draw_load()
                 tmp = RGBA(0,0,0,0);
             m_image->setPixel(i,j,tmp.convertQt());
         }
-
 }
 

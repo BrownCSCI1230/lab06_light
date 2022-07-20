@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/background.png</file>
+        <file alias="intersection_data">intersections.dat</file>
+    </qresource>
+</RCC>
