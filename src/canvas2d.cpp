@@ -12,7 +12,7 @@
 #include <iostream>
 #include <fstream>
 #include <QCoreApplication>
-#include <Qfile>
+#include <QtCore>
 
 #include "rgba.h"
 #include "canvas2d.h"
