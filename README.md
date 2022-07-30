@@ -102,7 +102,7 @@ To focus solely on the lighting part of raytracing, you won’t need to worry ab
 Specifically, you will work on this function at the pixel level. You will have a 2D array of intersection data. Each element in this array contains the data you need in order to calculate its RGBA value.
 
 <p align="center">
-    <img src="images/array.png" width="95%">
+    <img src="images/Array.png" width="95%">
     <figcaption align = "center"> <b>Fig. 3</b> 
     2D array processing
     </figcaption>
