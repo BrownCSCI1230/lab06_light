@@ -7,10 +7,10 @@
  * Copyright (C) 2022 Brown U. All rights reserved.
 -->
 
-TODO:
+<!-- TODO:
 make section 1 brief
 In section 2 equation, indicate we will go through this part by part
-In section 3, explain how reflection is an extension.
+In section 3, explain how reflection is an extension. -->
 
 # Lab 6: Light
 
